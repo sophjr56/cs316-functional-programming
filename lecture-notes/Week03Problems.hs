@@ -1,3 +1,4 @@
+{- HLINT ignore "Redundant lambda" -}
 module Week03Problems where
 
 import Data.Char
@@ -14,6 +15,9 @@ import Data.Char
 
 mulBy2 :: Int -> Int
 mulBy2 x = 2*x
+
+mulBy2' :: Int -> Int
+mulBy2' = \x -> x*2
 
 mul :: Int -> Int -> Int
 mul x y = x * y
