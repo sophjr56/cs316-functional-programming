@@ -2,6 +2,7 @@ module Week01Problems where
 
 import Week01
 import Prelude hiding (Left, Right, reverse)
+import Data.Bits (Bits(xor))
 
 {----------------------------------------------------------------------}
 {- Exercises                                                          -}
@@ -13,7 +14,10 @@ import Prelude hiding (Left, Right, reverse)
 {- 1. Write a function: -}
 
 isHorizontal :: Direction -> Bool
-isHorizontal = undefined
+isHorizontal Up = False
+isHorizontal Down = False
+isHorizontal Left = True
+isHorizontal Right = True
 
 {- that returns 'True' if the direction is 'Left' or 'Right', and
    'False' otherwise. -}
@@ -22,7 +26,9 @@ isHorizontal = undefined
 {- 2. Write a function: -}
 
 flipHorizontally :: Direction -> Direction
-flipHorizontally = undefined
+flipHorizontally x = x
+flipHorizontally Left = Right
+flipHorizontally Right = Left
 
 {- that flips horizontally (Left <-> Right, Up and Down stay the same). -}
 
@@ -31,7 +37,11 @@ flipHorizontally = undefined
       input: -}
 
 pairOfEqualDirections :: Pair Direction Direction -> Bool
-pairOfEqualDirections = undefined
+pairOfEqualDirections (MkPair Up Up) = True
+pairOfEqualDirections (MkPair Down Down) = True
+pairOfEqualDirections (MkPair Right Right) = True
+pairOfEqualDirections (MkPair Left Left) = True
+pairOfEqualDirections (MkPair _ _) = False
 
 
 {- 4. Define a datatype 'Triple a b c' for values that have three

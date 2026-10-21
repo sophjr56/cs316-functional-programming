@@ -140,8 +140,8 @@ instance Semigroup (First a) where
   MkFirst Nothing <> y = y
   x <> _ = x
 
-instace Monoid (First a) where
-  mempty = MkFirst Nothing
+--instace Monoid (First a) where
+  --mempty = MkFirst Nothing
 
 
 

@@ -1,3 +1,4 @@
+{-# LANGUAGE InstanceSigs #-}
 module Week05Problems where
 
 import Data.Foldable
@@ -21,7 +22,8 @@ import Data.Bits (FiniteBits(countLeadingZeros))
 data Host = MkHost String Int
 
 instance Show Host where
-  show = undefined
+  show :: Host -> String
+  show (MkHost adr port)  = "{\"name\":\"" ++ adr ++ "\", \"port\": " ++ show port ++ "}"
 
 
 
@@ -33,7 +35,8 @@ instance Show Host where
 newtype ClockHour = MkClockHour Int
 
 instance Eq ClockHour where
-  x == y = undefined
+  (==) :: ClockHour -> ClockHour -> Bool
+  (MkClockHour x) == (MkClockHour y) = x `mod` 12 == y `mod` 12
 
 {- You should have:
 
@@ -70,7 +73,11 @@ data RoughCount
    What is the 'mempty' that does nothing? -}
 
 instance Semigroup RoughCount where
-  x <> y = undefined
+ --(<>) :: RoughCount -> RoughCount -> RoughCount
+   Zero <> x   = x
+   One <> One = One
+   Many <> _   = Many
+
 
 instance Monoid RoughCount where
   mempty = undefined
