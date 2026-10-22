@@ -1,8 +1,10 @@
+{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
 module Week01Problems where
 
 import Week01
 import Prelude hiding (Left, Right, reverse)
 import Data.Bits (Bits(xor))
+import Week02 (remove)
 
 {----------------------------------------------------------------------}
 {- Exercises                                                          -}
@@ -49,8 +51,17 @@ pairOfEqualDirections (MkPair _ _) = False
       'get2of3' and 'get3of3' that return the first, second and third
       components. You will have to come up with the type signatures
       for the second and third one. -}
+data Triple a b c = MkTriple a b c
+   deriving Show
 
+get1of3 :: Triple a b c -> a
+get1of3 (MkTriple a b c) = a
 
+get2of3 :: Triple a b c -> b
+get2of3 (MkTriple a b c) = b
+
+get3of3 :: Triple a b c -> c
+get3of3 (MkTriple a b c) = c
 {- 5. Pattern matching on specific characters is done by writing the
       character to match. For example: -}
 
@@ -69,7 +80,9 @@ isA _   = False
       pattern matching on them.) -}
 
 dropSpaces :: [Char] -> [Char]
-dropSpaces = undefined
+dropSpaces [] = []
+dropSpaces (' ':xs) = dropSpaces xs
+dropSpaces xs = xs
 
 {- 6. Using 'reverse' and 'dropSpaces', write a function that removes
       spaces at the *end* of a list of characters. For example:
@@ -79,7 +92,8 @@ dropSpaces = undefined
 -}
 
 dropTrailingSpaces :: [Char] -> [Char]
-dropTrailingSpaces = undefined
+dropTrailingSpaces xs = reverse (dropSpaces (reverse xs))
+
 
 {- 7. HTML escaping. When writing HTML, the characters '<', '&', and '>'
       are special because they are used to represent tags and
@@ -99,7 +113,11 @@ dropTrailingSpaces = undefined
 -}
 
 htmlEscape :: String -> String
-htmlEscape = undefined
+htmlEscape "" = ""
+htmlEscape ('<':cs) = "&lt;" ++ htmlEscape cs
+htmlEscape ('>':cs) = "&gt;" ++ htmlEscape cs
+htmlEscape ('&':cs) = "&amp;" ++ htmlEscape cs
+htmlEscape (c:cs) = c :  htmlEscape cs
 
 {- 8. The following datatype represents a piece of text marked up with
       style information. -}
@@ -121,14 +139,17 @@ exampleMarkup = Concat (Bold (Text "Delays")) (Concat (Text " are ") (Italic (Te
       'Markup's and concatenates them all together using 'Concat'. -}
 
 catMarkup :: [Markup] -> Markup
-catMarkup = undefined
+catMarkup [] = Text ""
+catMarkup (m:ms) = Concat m (catMarkup ms)
 
 {-    Another way of making the writing of Markup easier is the
       automatic insertion of spaces. Write another function that
       concatenates a list of 'Markup's putting spaces between them: -}
 
 catMarkupSpaced :: [Markup] -> Markup
-catMarkupSpaced = undefined
+catMarkupSpaced [] = Text ""
+catMarkupSpaced [m] = m 
+catMarkupSpaced (m:ms) = Concat m (Concat (Text " ") (catMarkup ms))
 
 {-    Sometimes we want to remove all formatting from a piece of
       text. Write a function that removes all 'Bold' and 'Italic'
@@ -142,7 +163,10 @@ catMarkupSpaced = undefined
 -}
 
 removeStyle :: Markup -> Markup
-removeStyle = undefined
+removeStyle (Text s) = Text s
+removeStyle (Bold m) = removeStyle m
+removeStyle (Italic m) = removeStyle m
+removeStyle (Concat m1 m2) = Concat (removeStyle m1) (removeStyle m2)
 
 {-    Finally, we can 'render' our markup to HTML. Write a function that
       converts 'Markup' to its HTML string representation, using
@@ -162,4 +186,8 @@ removeStyle = undefined
 -}
 
 markupToHTML :: Markup -> String
-markupToHTML = undefined
+markupToHTML (Text s) = htmlEscape s
+markupToHTML (Bold m) = "<strong>" ++ markupToHTML m ++ "</strong"
+markupToHTML (Italic m) =  "<em>" ++ markupToHTML m ++ "</em>"
+markupToHTML (Concat m1 m2) = markupToHTML m1 ++ markupToHTML m2
+
