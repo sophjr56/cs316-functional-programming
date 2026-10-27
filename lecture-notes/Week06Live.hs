@@ -60,13 +60,17 @@ exampleTree
   = Node (Node (Leaf (0, "Zero")) (Leaf (2, "Three")))
          (Leaf (4, "Four"))
 
-andTHEN :: a
+andTHEN :: Print (Maybe a)
+         -> (a -> Print (Maybe a))
+         -> Print (maybe a)
 andTHEN = undefined
 
-orELSE :: a
+orELSE :: Print (Maybe a)
+         -> (a -> Print (Maybe a))
+         -> Print (maybe a)
 orELSE = undefined
 
-say :: a
+say :: String -> Print (Maybe())
 say = undefined
 
 succeed :: a
